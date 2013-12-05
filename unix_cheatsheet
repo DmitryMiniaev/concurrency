@@ -1,0 +1,30 @@
+Control characters
+
+^W delete word
+^?/^H delete character
+^Q restore scroling
+^\ program termination
+^D eof
+^C program shut down
+^Z sleep program
+^U delete line
+^S stop scrolling
+^L clean terminal
+^A go to begin of line
+^U delete inputed
+
+Useful comands
+whatis - short info about command
+passwd - chage user passwords
+history - history of entered commands
+whoami
+id
+users
+who
+w
+uname
+uptime
+
+du -H disk usage in human format
+df -H disk free space in human format
+TODO links, symlinks, stat and file
