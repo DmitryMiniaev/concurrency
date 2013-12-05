@@ -1,42 +1,38 @@
 package hw1;
 
-import java.util.*;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Dimon
- * Date: 8/14/13
- * Time: 11:20 PM
- * To change this template use File | Settings | File Templates.
- */
 public class Semaphore {
-    private int maxThreads;
-    private int curThreads;
-    private Queue<Long> waitingThreads = new LinkedList<Long>();
+    private final int CAPACITY;
+    private Lock lock = new ReentrantLock();
+    private Condition notFull = lock.newCondition();
+    private int cnt;
 
-    public Semaphore(int maxThreads) {
-        this.maxThreads = maxThreads;
+    public Semaphore(int capacity) {
+        this.CAPACITY = capacity;
     }
 
-    public synchronized void acquire() throws InterruptedException {
-        curThreads++;
-        waitingThreads.add(Thread.currentThread().getId());
-        while (curThreads > maxThreads) {
-            this.wait();
-            boolean isLockedForThisThread = !waitingThreads.isEmpty()
-                    && waitingThreads.peek() != Thread.currentThread().getId();
-            if (!isLockedForThisThread) {
-                this.notify();
-                this.wait();
+    public void acquire() throws InterruptedException {
+        lock.lock();
+        try {
+            while (cnt + 1 == CAPACITY) {
+                notFull.await();
             }
-            waitingThreads.remove();
+            cnt++;
+        } finally {
+            lock.unlock();
         }
     }
 
-    public synchronized void release() {
-        if (!waitingThreads.isEmpty()) {
-            curThreads--;
-            this.notify();
+    public void release() {
+        lock.lock();
+        try {
+            cnt = (cnt > 0) ? cnt - 1 : cnt;
+            notFull.signalAll();
+        }finally {
+            lock.unlock();
         }
     }
 }
