@@ -17,7 +17,7 @@ public class Semaphore {
     public void acquire() throws InterruptedException {
         lock.lock();
         try {
-            while (cnt + 1 == CAPACITY) {
+            while (cnt == CAPACITY) {
                 notFull.await();
             }
             cnt++;
