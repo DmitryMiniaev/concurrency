@@ -16,21 +16,21 @@ public class OptimisticArrayQueue2<T> {
     }
 
     public void enq(T value) {
-        s:
         for (;;) {
             int oldSize = size.get();
             int newSize = oldSize + 1;
-            if(newSize != CAPACITY) {
+            if(newSize < CAPACITY) {
                 if(size.compareAndSet(oldSize, newSize)) {
-                    for(;;) {
-                        int oldTail = tail.get();
-                        int newTail = oldTail + 1;
-                        if(tail.compareAndSet(oldTail, newTail)){
-                            a.set(oldTail, value);
-                            break s;
-                        }
-                    }
+                    break;
                 }
+            }
+        }
+        for(;;) {
+            int oldTail = tail.get();
+            int newTail = (oldTail + 1) % CAPACITY;
+            if(tail.compareAndSet(oldTail, newTail)){
+                a.set(oldTail, value);
+                return;
             }
         }
     }
@@ -40,17 +40,21 @@ public class OptimisticArrayQueue2<T> {
         for (;;) {
             int oldSize = size.get();
             int newSize = oldSize - 1;
-            if(newSize != 0) {
+            if(newSize >= 0) {
                 if(size.compareAndSet(oldSize, newSize)) {
-                    for(;;) {
-                        int oldHead = head.get();
-                        int newHead = oldHead + 1;
-                        result = a.get(oldHead);
-                        if(tail.compareAndSet(oldHead, newHead)){
-                            return result;
-                        }
-                    }
+                   break;
                 }
+            }
+            if(newSize == -1) {
+                break;
+            }
+        }
+        for(;;) {
+            int oldHead = head.get();
+            int newHead = (oldHead + 1) % CAPACITY;
+            result = a.get(oldHead);
+            if(head.compareAndSet(oldHead, newHead)){
+                return result;
             }
         }
     }
