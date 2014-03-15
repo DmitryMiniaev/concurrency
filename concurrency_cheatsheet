@@ -1,17 +1,27 @@
 1. Назовите различия между Collections.synchronizedMap(new HashMap()) и ConcurrentHashMap.
+
 2. Что такое кооперативная многозадачность и она ли ли в Java. Если да, то какие преимущества. Если нет, то какая тогда в Java?
 3. Что такое "зеленый потоки" и они ли ли в Java (в HotSpot JVM.6)?
 4. Различия в интерфейсах Runnable и Callable.
 5. Напишите минимальный неблокирующий стек (всего два метода — push() и pop()).
 6. Напишите минимальный copy-on-write ArrayList (всего четыре метода — void add(int indx, int item), int get(int indx), void remove(int indx), int size()).
+
 7. Различя между Thread.isInterrupded() и Thread.interrupded().
+
+Thread.isInterrupded() - class method 
+Thread.interrupded() - static method
+Thread.isInterrupded() = currentThread().isInterrupted(false);
+Thread.interrupded() = currentThread().isInterrupted(true);
+After each throw of InterruptedException flag is interupted reseted.
+By calling Thread.currentThread.interrupt(), you set the interrupt flag of the thread,
+so higher level interrupt handlers will notice it and can handle it appropriately.
+
+
 8. Что происходит при вызове Thread.interrupt()?
 9. Некоторые из следующих методов deprecated а некоторые и не были никогда реализованы. Какие? Thread.interrupt(), Thread.stop(), Thread.yield(), Thread.suspend(), Thread.resume(), Thread.join(), Thread.start(), Thread.run(), Thread.sleep().
 10. Что Вы знаете о асинхронных вызовов методов? Есть ли это в самом языке Java? Если есть, то как реализовано? Если нет, то как бы Вы реализовали?
 11. Перечислите ВСЕ причины по которым может выскочить InterruptedException.
 12. Что изменилось между JMM до Java 5 и NewJMM после Java 5?
-
-
 13. В классе String все поля финальные. Можно ли убрать ключевое слово финал? Ведь сеттеров все равно нет — следовательно поля нельзя переустановить.
 14. Что такое ordering, visibility, atomicity, happend-before, mutual exclusion. И показать на примерах volatile, AtomicInteger, synchronize{} — что из вышеперечисленного списка присутствует и при каких вариантах использования.
 15. Назовите отличия synchronize{} и ReentrantLock.
