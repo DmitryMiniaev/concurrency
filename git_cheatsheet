@@ -10,3 +10,5 @@ git push -u origin master
 git diff --cached view added files
 
 git pull origin - fetch and merge from github
+
+http://www.git-tower.com/blog/git-cheat-sheet-detail/
